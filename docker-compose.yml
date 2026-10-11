@@ -8,9 +8,11 @@ services:
     ports:
       - "5432:5432"
   es:
-    image: docker.elastic.co/elasticsearch/elasticsearch:8.11.3
+    image: docker.elastic.co/elasticsearch/elasticsearch:9.5.5
+    container_name: es
     environment:
       - discovery.type=single-node
       - xpack.security.enabled=false
     ports:
       - "9200:9200"
+      - "9300:9300"
