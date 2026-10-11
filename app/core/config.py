@@ -8,6 +8,7 @@ class RunConfig(BaseModel):
 
 class ApiPrefix(BaseModel):
     api_pref: str = 'api_v1/'
+    upload_csv: str = 'upload_csv/'
 
 class DbConfig(BaseModel):
     url: PostgresDsn
@@ -24,7 +25,7 @@ class DbConfig(BaseModel):
     }
 
 class EsConfig(BaseModel):
-    url: str
+    url: str = 'http://127.0.0.1:9200/'
 
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(
