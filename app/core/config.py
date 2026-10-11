@@ -1,14 +1,17 @@
 from pydantic import BaseModel, PostgresDsn
 from pydantic_settings import BaseSettings, SettingsConfigDict
+from pathlib import Path
 
 
+BASE_DIR = Path(__file__).resolve().parent.parent
 class RunConfig(BaseModel):
     host: str = '0.0.0.0'
     port: int = 8080
 
 class ApiPrefix(BaseModel):
-    api_pref: str = 'api_v1/'
-    upload_csv: str = 'upload_csv/'
+    api_pref: str = '/api_v1'
+    upload_csv: str = '/upload_csv'
+    search: str = '/search'
 
 class DbConfig(BaseModel):
     url: PostgresDsn
@@ -29,13 +32,13 @@ class EsConfig(BaseModel):
 
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(
-        env_file= '.env',
+        env_file= BASE_DIR / '.env',
         case_sensitive = False,
         env_nested_delimiter='__',
         env_prefix='E_SEARCH__',
     )
     run: RunConfig = RunConfig()
-    db: DbConfig = DbConfig()
+    db: DbConfig
     api_v1: ApiPrefix = ApiPrefix()
     es: EsConfig = EsConfig()
 
