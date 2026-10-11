@@ -7,6 +7,17 @@ from api import router as api_router
 from core.models import db_helper, es_helper
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    if not await es_helper.client.indices.exists(index="documents"):
+        await es_helper.client.indices.create(
+            index="documents",
+            body={
+                "mappings": {
+                    "properties": {
+                        "text": {"type": "text"}
+                    }
+                }
+            }
+        )
     yield
     await db_helper.dispose()
     await es_helper.close()
