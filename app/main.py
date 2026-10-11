@@ -1,13 +1,13 @@
 import uvicorn
 from fastapi import FastAPI
 from contextlib import asynccontextmanager
-
+from elasticsearch.exceptions import BadRequestError
 from core.config import settings
 from api import router as api_router
 from core.models import db_helper, es_helper
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    if not await es_helper.client.indices.exists(index="documents"):
+    try:
         await es_helper.client.indices.create(
             index="documents",
             body={
@@ -18,6 +18,9 @@ async def lifespan(app: FastAPI):
                 }
             }
         )
+    except BadRequestError as e:
+        if "resource_already_exists_exception" not in str(e):
+            raise e
     yield
     await db_helper.dispose()
     await es_helper.close()
