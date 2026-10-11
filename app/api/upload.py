@@ -6,7 +6,7 @@ router = APIRouter(
     prefix=settings.api_v1.upload_csv
 )
 
-@router.post()
+@router.post('')
 async def upload_csv_endpoint(
     background_tasks: BackgroundTasks,
     file: UploadFile = File(...),
